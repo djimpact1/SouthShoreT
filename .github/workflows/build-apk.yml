@@ -21,6 +21,9 @@ jobs:
       - name: Unzip SouthShoreT project
         run: unzip -o SouthShoreT-Android-v0.1.zip
 
+      - name: Copy Gradle properties
+        run: cp gradle.properties SouthShoreT/gradle.properties
+
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
         with:
