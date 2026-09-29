@@ -20,29 +20,29 @@ jobs:
 
       - name: Unzip SouthShoreT project
         run: |
-          rm -rf SouthShoreT-v011
-          mkdir -p SouthShoreT-v011
-          unzip -o SouthShoreT-Android-v0.11.zip -d SouthShoreT-v011
+          rm -rf SouthShoreT-v012
+          mkdir -p SouthShoreT-v012
+          unzip -o SouthShoreT-Android-v0.12.zip -d SouthShoreT-v012
 
-          if [ ! -f SouthShoreT-v011/settings.gradle.kts ]; then
-            PROJECT_ROOT=$(find SouthShoreT-v011 -type f -name settings.gradle.kts -printf '%h\n' | head -n 1)
+          if [ ! -f SouthShoreT-v012/settings.gradle.kts ]; then
+            PROJECT_ROOT=$(find SouthShoreT-v012 -type f -name settings.gradle.kts -printf '%h\n' | head -n 1)
 
             if [ -z "$PROJECT_ROOT" ]; then
               echo "Could not locate settings.gradle.kts after extraction"
-              find SouthShoreT-v011 -maxdepth 3 -type f -print
+              find SouthShoreT-v012 -maxdepth 3 -type f -print
               exit 1
             fi
 
             shopt -s dotglob nullglob
-            mv "$PROJECT_ROOT"/* SouthShoreT-v011/
+            mv "$PROJECT_ROOT"/* SouthShoreT-v012/
           fi
 
       - name: Copy Gradle properties
-        run: cp gradle.properties SouthShoreT-v011/gradle.properties
+        run: cp gradle.properties SouthShoreT-v012/gradle.properties
 
       - name: Set Java 17 compatibility
         run: |
-          sed -i '/android {/a\    compileOptions {\n        sourceCompatibility = JavaVersion.VERSION_17\n        targetCompatibility = JavaVersion.VERSION_17\n    }' SouthShoreT-v011/app/build.gradle.kts
+          sed -i '/android {/a\    compileOptions {\n        sourceCompatibility = JavaVersion.VERSION_17\n        targetCompatibility = JavaVersion.VERSION_17\n    }' SouthShoreT-v012/app/build.gradle.kts
 
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
@@ -50,11 +50,11 @@ jobs:
           gradle-version: '8.9'
 
       - name: Build debug APK
-        working-directory: SouthShoreT-v011
+        working-directory: SouthShoreT-v012
         run: gradle assembleDebug
 
       - name: Upload SouthShoreT APK
         uses: actions/upload-artifact@v4
         with:
           name: SouthShoreT-APK
-          path: SouthShoreT-v011/app/build/outputs/apk/debug/app-debug.apk
+          path: SouthShoreT-v012/app/build/outputs/apk/debug/app-debug.apk
