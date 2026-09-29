@@ -19,7 +19,7 @@ jobs:
           java-version: '17'
 
       - name: Unzip SouthShoreT project
-        run: unzip -o SouthShoreT-Android-v0.2.zip
+        run: unzip -o SouthShoreT-Android-v0.3.zip
 
       - name: Copy Gradle properties
         run: cp gradle.properties SouthShoreT/gradle.properties
