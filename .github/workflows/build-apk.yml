@@ -19,7 +19,23 @@ jobs:
           java-version: '17'
 
       - name: Unzip SouthShoreT project
-        run: unzip -o SouthShoreT-Android-v0.4.zip
+        run: |
+          rm -rf SouthShoreT-v04
+          mkdir -p SouthShoreT-v04
+          unzip -o SouthShoreT-Android-v0.4.zip -d SouthShoreT-v04
+
+          if [ ! -f SouthShoreT-v04/settings.gradle.kts ]; then
+            PROJECT_ROOT=$(find SouthShoreT-v04 -type f -name settings.gradle.kts -printf '%h\n' | head -n 1)
+
+            if [ -z "$PROJECT_ROOT" ]; then
+              echo "Could not locate settings.gradle.kts after extraction"
+              find SouthShoreT-v04 -maxdepth 3 -type f -print
+              exit 1
+            fi
+
+            shopt -s dotglob nullglob
+            mv "$PROJECT_ROOT"/* SouthShoreT-v04/
+          fi
 
       - name: Copy Gradle properties
         run: cp gradle.properties SouthShoreT-v04/gradle.properties
